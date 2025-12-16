@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results Countdown</title>
+    <style>
+        /* CSS STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* Blue gradient background for a professional look */
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px); /* Glass effect */
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #dcdcdc;
+            font-weight: 300;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: #2c5364;
+            padding: 1.5rem;
+            border-radius: 12px;
+            min-width: 110px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .time-box span {
+            display: block;
+        }
+
+        .number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* Message to show when timer hits 0 */
+        #content-message {
+            display: none; /* Hidden by default */
+            margin-top: 2rem;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .btn-check {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-check:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1rem; }
+            .countdown { gap: 0.8rem; }
+            .time-box { min-width: 75px; padding: 0.8rem; }
+            .number { font-size: 2rem; }
+            h1 { font-size: 1.6rem; }
+            .label { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Annual Exam Results</h1>
+        <p class="subtitle">Publishing on Dec 17, 2025 at 10:00 AM</p>
+
+        <div class="countdown" id="countdown-box">
+            <div class="time-box">
+                <span class="number" id="days">00</span>
+                <span class="label">Days</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="hours">00</span>
+                <span class="label">Hours</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Minutes</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Seconds</span>
+            </div>
+        </div>
+
+        <div id="content-message">
+            <h2 style="margin-bottom: 10px;">Results are Live!</h2>
+            <p>Good luck to all students.</p>
+            <a href="#" class="btn-check">Click Here to Check Result</a>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // Date set to: December 17, 2025 at 10:00:00 AM
+        const resultDate = new Date("December 17, 2025 10:00:00").getTime();
+        // ---------------------
+
+        const timerFunction = setInterval(() => {
+            const now = new Date().getTime();
+            const gap = resultDate - now;
+
+            // Time calculations
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            const textDay = Math.floor(gap / day);
+            const textHour = Math.floor((gap % day) / hour);
+            const textMinute = Math.floor((gap % hour) / minute);
+            const textSecond = Math.floor((gap % minute) / second);
+
+            // Update HTML (With leading zeros)
+            document.getElementById("days").innerText = textDay < 10 ? '0' + textDay : textDay;
+            document.getElementById("hours").innerText = textHour < 10 ? '0' + textHour : textHour;
+            document.getElementById("minutes").innerText = textMinute < 10 ? '0' + textMinute : textMinute;
+            document.getElementById("seconds").innerText = textSecond < 10 ? '0' + textSecond : textSecond;
+
+            // If the countdown is finished
+            if (gap < 0) {
+                clearInterval(timerFunction);
+                document.getElementById("countdown-box").style.display = "none";
+                document.getElementById("content-message").style.display = "block";
+                document.querySelector(".subtitle").innerText = "Result Published";
+            }
+
+        }, 1000);
+    </script>
+</body>
+</html>
+
